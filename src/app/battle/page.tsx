@@ -6,6 +6,12 @@ import Link from 'next/link';
 import { useGameState } from '@/hooks/useGameState';
 import { chapters, getRandomQuestions } from '@/data/questions';
 
+const btnBase = "inline-block px-6 py-3 rounded-lg font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:opacity-90 active:scale-95 text-center cursor-pointer";
+const btnCyan = "border-2 border-cyan-400";
+const btnGreen = "border-2 border-green-400";
+const btnRed = "border-2 border-red-400";
+const cardStyle = "bborder-2 border-slate-700 rounded-xl";
+
 function BattleContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -77,9 +83,9 @@ function BattleContent() {
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="rpg-card p-8 max-w-md w-full text-center">
+        <div className={`${cardStyle} p-8 max-w-md w-full text-center`}>
           {/* Result Icon */}
-          <div className={`text-8xl mb-4 ${battleState.isPassed ? 'float-animation' : 'shake'}`}>
+          <div className={`text-8xl mb-4 ${battleState.isPassed ? 'animate-bounce' : 'animate-pulse'}`}>
             {battleState.isPassed ? '🏆' : '💀'}
           </div>
 
@@ -97,7 +103,7 @@ function BattleContent() {
           {battleState.isPassed && (
             <div className="flex justify-center gap-2 mb-6">
               {[...Array(3)].map((_, i) => (
-                <span key={i} className={`text-4xl ${i < stars ? 'star' : 'star-empty'}`}>
+                <span key={i} className={`text-4xl ${i < stars ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]' : 'text-gray-600'}`}>
                   ★
                 </span>
               ))}
@@ -106,11 +112,11 @@ function BattleContent() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="rpg-card p-4">
+            <div className={`${cardStyle} p-4`}>
               <div className="text-2xl text-green-400 font-bold">{battleState.correctAnswers}</div>
               <div className="text-sm text-gray-500">Correct</div>
             </div>
-            <div className="rpg-card p-4">
+            <div className={`${cardStyle} p-4`}>
               <div className="text-2xl text-red-400 font-bold">{battleState.wrongAnswers}</div>
               <div className="text-sm text-gray-500">Wrong</div>
             </div>
@@ -138,14 +144,14 @@ function BattleContent() {
                 const questions = getRandomQuestions(chapter.strand, isBoss ? 5 : 10);
                 startBattle(battleState.dungeonId, questions);
               }}
-              className="rpg-btn w-full"
+              className={`${btnBase} ${btnCyan} w-full`}
             >
               {battleState.isPassed ? 'Play Again' : 'Try Again'}
             </button>
             <Link
               href="/map"
               onClick={() => completeBattle()}
-              className="rpg-btn rpg-btn-success w-full text-center"
+              className={`${btnBase} ${btnGreen} w-full`}
             >
               Return to Map
             </Link>
@@ -182,9 +188,9 @@ function BattleContent() {
           <span className="text-gray-400">Question {battleState.currentQuestionIndex + 1}/{battleState.questions.length}</span>
           <span className="text-gray-400">{battleState.correctAnswers} correct</span>
         </div>
-        <div className="progress-bar">
+        <div className="h-5 bg-slate-900 border-2 border-slate-700 rounded-full overflow-hidden">
           <div
-            className="progress-fill progress-xp"
+            className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -197,7 +203,7 @@ function BattleContent() {
             key={i}
             className={`text-3xl transition-all ${
               i < battleState.hearts ? 'text-red-500' : 'text-gray-600'
-            } ${i === battleState.hearts && showFeedback && !isCorrect ? 'shake' : ''}`}
+            } ${i === battleState.hearts && showFeedback && !isCorrect ? 'animate-pulse' : ''}`}
           >
             ❤️
           </span>
@@ -206,7 +212,7 @@ function BattleContent() {
 
       {/* Question Card */}
       <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
-        <div className={`rpg-card p-6 md:p-8 w-full mb-6 ${showFeedback ? (isCorrect ? 'border-green-500' : 'border-red-500') : ''}`}>
+        <div className={`${cardStyle} p-6 md:p-8 w-full mb-6 ${showFeedback ? (isCorrect ? 'border-green-500' : 'border-red-500') : ''}`}>
           {/* Monster/Topic */}
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="text-4xl">{isBoss ? chapter.boss.icon : '👾'}</span>
@@ -221,12 +227,12 @@ function BattleContent() {
           {/* Options */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {currentQuestion.options.map((option, i) => {
-              let btnClass = 'rpg-btn w-full text-left';
+              let btnClass = `${btnBase} ${btnCyan} w-full text-left`;
               if (showFeedback) {
                 if (i === currentQuestion.correctAnswer) {
-                  btnClass += ' answer-correct';
+                  btnClass = `${btnBase} bg-green-500 border-2 border-green-400 w-full text-left`;
                 } else if (i === selectedAnswer && !isCorrect) {
-                  btnClass += ' answer-wrong shake';
+                  btnClass = `${btnBase} bg-red-500 border-2 border-red-400 w-full text-left animate-pulse`;
                 }
               }
 

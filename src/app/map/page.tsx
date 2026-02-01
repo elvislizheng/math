@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useGameState } from '@/hooks/useGameState';
 import { chapters } from '@/data/questions';
 
+const cardStyle = "bg-slate-800 border-2 border-slate-700 rounded-xl";
+
 export default function MapPage() {
   const { progress, isLoaded } = useGameState();
 
@@ -36,7 +38,7 @@ export default function MapPage() {
             <span className="text-2xl">🪙</span>
             <span className="text-yellow-400 font-semibold">{progress.gold}</span>
           </div>
-          <div className="rpg-card px-4 py-2">
+          <div className={`${cardStyle} px-4 py-2`}>
             <span className="text-cyan-400">Lv.{progress.level}</span>
           </div>
         </div>
@@ -61,8 +63,8 @@ export default function MapPage() {
           return (
             <div
               key={chapter.id}
-              className={`rpg-card p-6 transition-all ${
-                isUnlocked ? 'hover:scale-[1.02]' : 'opacity-50 grayscale'
+              className={`${cardStyle} p-6 transition-all ${
+                isUnlocked ? 'hover:scale-[1.02] hover:border-cyan-500' : 'opacity-50 grayscale'
               }`}
             >
               <div className="flex items-start gap-6">
@@ -93,7 +95,7 @@ export default function MapPage() {
                       {[...Array(3)].map((_, i) => (
                         <span
                           key={i}
-                          className={`text-lg ${i < Math.floor(chapterStars / chapter.dungeons.length) ? 'star' : 'star-empty'}`}
+                          className={`text-lg ${i < Math.floor(chapterStars / chapter.dungeons.length) ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]' : 'text-gray-600'}`}
                         >
                           ★
                         </span>
@@ -113,7 +115,7 @@ export default function MapPage() {
                           <Link
                             key={dungeon.id}
                             href={`/battle?chapter=${chapter.id}&dungeon=${dungeon.id}`}
-                            className={`rpg-card px-4 py-2 text-sm hover:border-cyan-500 transition ${
+                            className={`${cardStyle} px-4 py-2 text-sm hover:border-cyan-500 transition ${
                               result?.completed ? 'border-green-500/50' : ''
                             }`}
                           >
@@ -125,7 +127,7 @@ export default function MapPage() {
                                   {[...Array(3)].map((_, i) => (
                                     <span
                                       key={i}
-                                      className={`text-xs ${i < result.stars ? 'star' : 'star-empty'}`}
+                                      className={`text-xs ${i < result.stars ? 'text-yellow-400' : 'text-gray-600'}`}
                                     >
                                       ★
                                     </span>
@@ -140,7 +142,7 @@ export default function MapPage() {
                       {/* Boss */}
                       <Link
                         href={`/battle?chapter=${chapter.id}&boss=true`}
-                        className="rpg-card px-4 py-2 text-sm border-red-500/30 hover:border-red-500 transition"
+                        className={`${cardStyle} px-4 py-2 text-sm border-red-500/30 hover:border-red-500 transition`}
                       >
                         <div className="flex items-center gap-2 text-red-400">
                           <span>{chapter.boss.icon}</span>

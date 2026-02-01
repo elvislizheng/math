@@ -3,6 +3,11 @@
 import Link from 'next/link';
 import { useGameState } from '@/hooks/useGameState';
 
+const btnBase = "inline-block px-6 py-3 rounded-lg font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:opacity-90 active:scale-95 text-center cursor-pointer";
+const btnCyan = "border-2 border-cyan-400";
+const btnRed = "border-2 border-red-400";
+const cardStyle = " border-2 border-slate-700 rounded-xl";
+
 export default function Home() {
   const { progress, isLoaded, resetGame } = useGameState();
 
@@ -18,7 +23,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
       {/* Title Section */}
       <div className="text-center mb-12">
-        <div className="text-6xl mb-4 float-animation">⚔️</div>
+        <div className="text-6xl mb-4 animate-bounce">⚔️</div>
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-blue-400 to-amber-400 bg-clip-text text-transparent">
           Math Quest
         </h1>
@@ -28,7 +33,7 @@ export default function Home() {
 
       {/* Player Stats Card */}
       {progress.totalAnswered > 0 && (
-        <div className="rpg-card p-6 mb-8 w-full max-w-md">
+        <div className={`${cardStyle} p-6 mb-8 w-full max-w-md`}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-pink-500 flex items-center justify-center text-2xl">
@@ -52,9 +57,9 @@ export default function Home() {
               <span className="text-cyan-400">XP</span>
               <span className="text-gray-400">{progress.xp} / {progress.xpToNextLevel}</span>
             </div>
-            <div className="progress-bar">
+            <div className="h-5 bg-slate-900 border-2 border-slate-700 rounded-full overflow-hidden">
               <div
-                className="progress-fill progress-xp"
+                className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full transition-all duration-500"
                 style={{ width: `${(progress.xp / progress.xpToNextLevel) * 100}%` }}
               />
             </div>
@@ -80,7 +85,7 @@ export default function Home() {
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-4 w-full max-w-md">
-        <Link href="/map" className="rpg-btn text-center text-lg">
+        <Link href="/map" className={`${btnBase} ${btnCyan} text-lg`}>
           {progress.totalAnswered > 0 ? 'Continue Quest' : 'Start Quest'}
         </Link>
 
@@ -91,7 +96,7 @@ export default function Home() {
                 resetGame();
               }
             }}
-            className="rpg-btn rpg-btn-danger text-center"
+            className={`${btnBase} ${btnRed}`}
           >
             Reset Progress
           </button>
@@ -106,7 +111,7 @@ export default function Home() {
           { icon: '⭐', label: 'Star Ratings' },
           { icon: '🏆', label: 'Achievements' },
         ].map((feature, i) => (
-          <div key={i} className="rpg-card p-4 text-center">
+          <div key={i} className={`${cardStyle} p-4 text-center hover:border-cyan-500 transition-colors`}>
             <div className="text-3xl mb-2">{feature.icon}</div>
             <div className="text-sm text-gray-400">{feature.label}</div>
           </div>
